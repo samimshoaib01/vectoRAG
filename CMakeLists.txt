@@ -19,6 +19,7 @@ add_executable(db
     src/main.cpp
     src/distance.cpp
     src/bruteforce.cpp
+    src/kdtree.cpp
 )
 
 target_include_directories(db PRIVATE
