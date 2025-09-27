@@ -21,6 +21,7 @@ add_executable(db
     src/bruteforce.cpp
     src/kdtree.cpp
     src/hnsw.cpp
+    src/vectordb.cpp
 )
 
 target_include_directories(db PRIVATE
