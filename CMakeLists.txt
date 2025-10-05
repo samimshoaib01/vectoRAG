@@ -24,6 +24,7 @@ add_executable(db
     src/vectordb.cpp
     src/demo_data.cpp
     src/json_utils.cpp
+    src/text_utils.cpp
 )
 
 target_include_directories(db PRIVATE
