@@ -26,6 +26,7 @@ add_executable(db
     src/json_utils.cpp
     src/text_utils.cpp
     src/ollama_client.cpp
+    src/documentdb.cpp
 )
 
 target_include_directories(db PRIVATE
