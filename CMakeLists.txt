@@ -27,6 +27,7 @@ add_executable(db
     src/text_utils.cpp
     src/ollama_client.cpp
     src/documentdb.cpp
+    src/routes.cpp
 )
 
 target_include_directories(db PRIVATE
