@@ -28,6 +28,7 @@ add_executable(db
     src/ollama_client.cpp
     src/documentdb.cpp
     src/routes.cpp
+    src/storage.cpp
 )
 
 target_include_directories(db PRIVATE
@@ -35,9 +36,12 @@ target_include_directories(db PRIVATE
     ${CMAKE_SOURCE_DIR}/third_party
 )
 
+find_package(PostgreSQL REQUIRED)
+target_include_directories(db PRIVATE ${PostgreSQL_INCLUDE_DIRS})
+
 if(WIN32)
-    target_link_libraries(db PRIVATE ws2_32)
+    target_link_libraries(db PRIVATE ws2_32 ${PostgreSQL_LIBRARIES})
 else()
     find_package(Threads REQUIRED)
-    target_link_libraries(db PRIVATE Threads::Threads)
+    target_link_libraries(db PRIVATE Threads::Threads ${PostgreSQL_LIBRARIES})
 endif()
