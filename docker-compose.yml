@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: vectordb
+      POSTGRES_USER: vdb
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vdb -d vectordb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+
+  vectordb:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://vdb:${POSTGRES_PASSWORD}@postgres:5432/vectordb
+      OLLAMA_HOST: ollama
+      OLLAMA_PORT: 11434
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - vectordb
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  ollama_models:
+  caddy_data:
+  caddy_config:
